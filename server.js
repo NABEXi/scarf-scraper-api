@@ -81,6 +81,88 @@ const listings = await page.$$eval("li.s-item", items =>
   }
 });
 
+app.get("/search-etsy", async (req, res) => {
+  const query = req.query.q || "";
+
+  res.json({
+    website: "Etsy",
+    searchUrl: `https://www.etsy.com/search?q=${encodeURIComponent(query)}`
+  });
+});
+
+app.get("/search-vestiaire", async (req, res) => {
+  const query = req.query.q || "";
+
+  res.json({
+    website: "Vestiaire",
+    searchUrl: `https://www.vestiairecollective.com/search/?q=${encodeURIComponent(query)}`
+  });
+});
+
+app.get("/search-fashionphile", async (req, res) => {
+  const query = req.query.q || "";
+
+  res.json({
+    website: "Fashionphile",
+    searchUrl: `https://www.fashionphile.com/search?search=${encodeURIComponent(query)}`
+  });
+});
+
+app.get("/search-therealreal", async (req, res) => {
+  const query = req.query.q || "";
+
+  res.json({
+    website: "TheRealReal",
+    searchUrl: `https://www.therealreal.com/products?keywords=${encodeURIComponent(query)}`
+  });
+});
+
+app.get("/search-1stdibs", async (req, res) => {
+  const query = req.query.q || "";
+
+  res.json({
+    website: "1stDibs",
+    searchUrl: `https://www.1stdibs.com/search/?q=${encodeURIComponent(query)}`
+  });
+});
+
+app.get("/search-all", async (req, res) => {
+  const query = req.query.q || "";
+
+  const websites = [
+    {
+      website: "eBay",
+      searchUrl: `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(query)}&_sacat=0`
+    },
+    {
+      website: "Etsy",
+      searchUrl: `https://www.etsy.com/search?q=${encodeURIComponent(query)}`
+    },
+    {
+      website: "Vestiaire",
+      searchUrl: `https://www.vestiairecollective.com/search/?q=${encodeURIComponent(query)}`
+    },
+    {
+      website: "Fashionphile",
+      searchUrl: `https://www.fashionphile.com/search?search=${encodeURIComponent(query)}`
+    },
+    {
+      website: "TheRealReal",
+      searchUrl: `https://www.therealreal.com/products?keywords=${encodeURIComponent(query)}`
+    },
+    {
+      website: "1stDibs",
+      searchUrl: `https://www.1stdibs.com/search/?q=${encodeURIComponent(query)}`
+    }
+  ];
+
+  res.json({
+    query,
+    count: websites.length,
+    websites
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Scarf scraper API running on port ${PORT}`);
 });
