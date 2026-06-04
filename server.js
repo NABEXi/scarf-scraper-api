@@ -28,19 +28,19 @@ app.get("/search-ebay", async (req, res) => {
     });
 
     const listings = await page.$$eval(".s-item", items =>
-      items.slice(0, 10).map(item => {
-        const title =
-          item.querySelector(".s-item__title")?.innerText?.trim() || "";
+  items.slice(0, 10).map(item => {
+    const title =
+      item.querySelector(".s-item__title")?.innerText?.trim() || "";
 
-        const price =
-          item.querySelector(".s-item__price")?.innerText?.trim() || "";
+    const price =
+      item.querySelector(".s-item__price")?.innerText?.trim() || "";
 
-        const link =
-          item.querySelector(".s-item__link")?.href || "";
+    const link =
+      item.querySelector(".s-item__link")?.href || "";
 
-        return { title, price, link };
-      }).filter(x => x.title && x.price && x.link)
-    );
+    return { title, price, link };
+  }).filter(x => x.title && x.price && x.link)
+);
 
     await browser.close();
 
