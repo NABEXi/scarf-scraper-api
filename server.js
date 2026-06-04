@@ -27,28 +27,42 @@ app.get("/search-ebay", async (req, res) => {
       timeout: 30000
     });
 
-    const listings = await page.$$eval(".s-item", items =>
-  items.slice(0, 10).map(item => {
+    await page.waitForTimeout(5000);
+
+const pageTitle = await page.title();
+const bodyText = await page.locator("body").innerText().catch(() => "");
+
+const listings = await page.$$eval("li.s-item", items =>
+  items.slice(0, 20).map(item => {
     const title =
-      item.querySelector(".s-item__title")?.innerText?.trim() || "";
+      item.querySelector(".s-item__title span")?.textContent?.trim() ||
+      item.querySelector(".s-item__title")?.textContent?.trim() ||
+      "";
 
     const price =
-      item.querySelector(".s-item__price")?.innerText?.trim() || "";
+      item.querySelector(".s-item__price")?.textContent?.trim() || "";
 
     const link =
-      item.querySelector(".s-item__link")?.href || "";
+      item.querySelector("a.s-item__link")?.href || "";
 
     return { title, price, link };
-  }).filter(x => x.title && x.price && x.link)
+  }).filter(x =>
+    x.title &&
+    x.price &&
+    x.link &&
+    !x.title.toLowerCase().includes("shop on ebay")
+  )
 );
 
     await browser.close();
 
     res.json({
-      query,
-      count: listings.length,
-      listings
-    });
+  query,
+  pageTitle,
+  bodyPreview: bodyText.slice(0, 500),
+  count: listings.length,
+  listings
+});
   } catch (error) {
     if (browser) {
       await browser.close();
