@@ -18,7 +18,14 @@ app.get("/search-ebay", async (req, res) => {
       headless: true
     });
 
-    const page = await browser.newPage();
+    const context = await browser.newContext({
+  userAgent:
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+  viewport: { width: 1366, height: 768 },
+  locale: "en-US"
+});
+
+const page = await context.newPage();
 
     const url = `https://www.ebay.com/sch/i.html?_nkw=${encodeURIComponent(query)}&_sacat=0`;
 
